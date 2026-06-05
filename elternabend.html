@@ -238,9 +238,36 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .slide { flex-direction: column; }
-            .slide-image { margin-left: 0; margin-top: 20px; max-height: 40vh; }
-            h1 { font-size: 2.5rem; }
+            .slide { flex-direction: column; padding: 20px; padding-top: 80px; }
+            .slide-image { margin-left: 0; margin-top: 20px; max-height: 35vh; max-width: 90%; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            .slide-content { padding: 20px; width: 90%; }
+            ul { font-size: 1.1rem; }
+            .mascot { width: 100px; bottom: 10px; right: 10px; }
+        }
+
+        @media (max-width: 600px) {
+            .nav-container { 
+                gap: 5px; 
+                overflow-x: auto; 
+                justify-content: flex-start; 
+                padding: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-item { 
+                font-size: 0.7rem; 
+                white-space: nowrap; 
+                padding: 5px 8px;
+            }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.5rem; }
+            .slide-content { width: 95%; padding: 15px; }
+            ul { font-size: 1rem; }
+            .mascot { width: 80px; }
+            .controls { bottom: 10px; right: 10px; gap: 5px; }
+            button { padding: 8px 15px; font-size: 0.9rem; }
+            .footer { bottom: 60px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -490,6 +517,36 @@
             updateSlide();
         });
     });
+
+    // Touch Support for Mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleGesture();
+    }, false);
+
+    function handleGesture() {
+        if (touchEndX < touchStartX - 50) {
+            // Swipe Left -> Next
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+        if (touchEndX > touchStartX + 50) {
+            // Swipe Right -> Prev
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+    }
 </script>
 
 </body>
